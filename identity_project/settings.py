@@ -5,7 +5,7 @@ import sys
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY    = os.environ.get("SECRET_KEY", "identity-dev-secret")
-DEBUG         = os.environ.get("DEBUG", "True") == "True"
+DEBUG         = False
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
 
 # ── Spring Cloud Config ───────────────────────────────────────────
