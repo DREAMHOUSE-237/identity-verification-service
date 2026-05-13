@@ -44,10 +44,12 @@ class IdentityAppConfig(AppConfig):
             return
 
         # 4. Only run in the main server process (gunicorn worker or runserver)
-        is_gunicorn_master = str(os.getpid()) == os.environ.get("GUNICORN_MAIN_PID", "")
-        is_runserver       = os.environ.get("RUN_MAIN") == "true"
+        # GUNICORN_MAIN_PID n'est pas injecté automatiquement — on utilise
+        # la variable WORKER_ID injectée par docker-compose (="0" pour le worker principal)
+        worker_id    = os.environ.get("WORKER_ID", "0")
+        is_runserver = os.environ.get("RUN_MAIN") == "true"
 
-        if not is_gunicorn_master and not is_runserver:
+        if worker_id != "0" and not is_runserver:
             return
 
         # 5. Optionally start RabbitMQ consumers
